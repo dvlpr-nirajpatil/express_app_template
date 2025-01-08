@@ -8,4 +8,4 @@ router.get("/user", users_controller.getUsers);
 router.get("/user/:id", users_controller.getUserById);
 router.delete("/user/:id", users_controller.deleteUserById);
 
-module.exports.router = router;
+module.exports = router;

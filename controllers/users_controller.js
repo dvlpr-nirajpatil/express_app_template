@@ -1,5 +1,6 @@
 const User = require("../models/user");
-const { response } = require("../utils/response");
+const response = require("../utils/response");
+const logger = require("../utils/logger");
 
 exports.addUser = async (req, res) => {
   const { name, email, password } = req.body;
@@ -7,10 +8,7 @@ exports.addUser = async (req, res) => {
   try {
     let user = await User.findOne({ email: email });
     if (user) {
-      res.status(409).json({
-        status: 409,
-        message: "email address already exists",
-      });
+      response(res, 409, "email address already exists");
     } else {
       let user = new User({
         name: name,
@@ -20,14 +18,11 @@ exports.addUser = async (req, res) => {
 
       user.save({ _id: 0, password: 0 });
       response(res, 201, "new user created", user);
-      //   res.status(201).json({
-      //     status: 201,
-      //     message: "new user created",
-      //     data: user,
-      //   });
     }
   } catch (e) {
-    console.log(`ERROR : ${e}`);
+    logger.error(e);
+
+    response(res, 401, null, null, e);
     res.json({ error: e });
   }
 };
@@ -42,7 +37,7 @@ exports.getUsers = async (req, res) => {
       data: user,
     });
   } catch (e) {
-    console.log(`ERROR : ${e}`);
+    response(res, 401, null, null, e);
     res.json({ error: e });
   }
 };
@@ -51,30 +46,20 @@ exports.getUserById = async (req, res) => {
   const { id } = req.params;
 
   if (!id) {
-    res.status(401).json({
-      status: 401,
-      message: "id is required",
-    });
+    response(res, 401, null, null, "id is required");
   }
 
   try {
     let user = await User.findById(id, { password: 0, __v: 0 });
 
     if (user) {
-      res.status(201).json({
-        status: 201,
-        message: "Successfull",
-        data: user,
-      });
+      response(res, 201, "Successfull", user);
     } else {
-      res.status(404).json({
-        status: 404,
-        message: "User not Found",
-      });
+      response(res, 404, "User not foudn");
     }
   } catch (e) {
-    console.log(`ERROR : ${e}`);
-    res.json({ error: e });
+    logger.error(e);
+    response(res, 401, null, null, e);
   }
 };
 
@@ -82,22 +67,15 @@ exports.deleteUserById = async (req, res) => {
   const { id } = req.params;
 
   if (!id) {
-    res.status(401).json({
-      status: 401,
-      message: "id is required",
-    });
+    response(res, 401, "id is required");
   }
 
   try {
     let user = await User.deleteOne({ _id: id }, { password: 0 });
 
-    res.status(201).json({
-      status: 201,
-      message: "Successfull",
-      data: user,
-    });
+    response(res, 201, "Successfull", user);
   } catch (e) {
-    console.log(`ERROR : ${e}`);
-    res.json({ error: e });
+    logger.error(e);
+    response(res, 401, null, null, e);
   }
 };

@@ -1,4 +1,4 @@
-exports.response = (res, status, message = null, data = null, error = null) => {
+response = (res, status, message = null, data = null, error = null) => {
   let response = {
     status: status,
   };
@@ -16,3 +16,5 @@ exports.response = (res, status, message = null, data = null, error = null) => {
 
   res.status(status).json(response);
 };
+
+module.exports = response;
