@@ -12,8 +12,4 @@ const morganMiddleware = (logger) => (req, res, next) => {
   morgan("tiny", { stream })(req, res, next);
 };
 
-const apiMiddleware = (req, res, next) => {
-  next();
-};
-
 module.exports = morganMiddleware;
