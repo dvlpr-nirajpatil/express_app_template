@@ -16,6 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(winstonMorganMiddleware(logger));
 
+//ROUTES
 app.use("/api/v1", userRoutes.router);
 
 //STREAMS
