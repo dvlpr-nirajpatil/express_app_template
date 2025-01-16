@@ -5,11 +5,25 @@ const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
 module.exports.newResfreshToken = (user) => {
-  return jwt.sign(user, refreshTokenSecret, { expiresIn: "15d" });
+  return jwt.sign(
+    {
+      uid: user.uid,
+      email: user.email,
+    },
+    refreshTokenSecret,
+    { expiresIn: "15d" }
+  );
 };
 
 module.exports.newAccessToken = (user) => {
-  return jwt.sign(user, accessTokenSecret, { expiresIn: "15m" });
+  return jwt.sign(
+    {
+      uid: user.uid,
+      email: user.email,
+    },
+    accessTokenSecret,
+    { expiresIn: "15m" }
+  );
 };
 
 module.exports.verifyRefreshToken = (token) => {

@@ -1,11 +1,23 @@
 const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema({
-  name: String,
-  email: String,
-  password: String,
+  uid: { type: String, unique: true, required: true },
+  fullname: { type: String },
+  email: { type: String, unique: true, required: true },
+  profilePicture: { type: String },
+  authType: {
+    type: String,
+    enum: ["google", "email", "apple"],
+    required: true,
+  },
+  google_id: { type: String, unique: true, sparse: true },
+  apple_id: { type: String, unique: true, sparse: true },
+  emailVerified: { type: Boolean, default: false },
+  password: { type: String },
+  createdAt: { type: Date, default: Date.Now, require: true },
+  updatedAt: { type: Date, default: Date.Now, require: true },
 });
 
-const user = mongoose.model("user", userSchema);
+const User = mongoose.model("User", userSchema);
 
-module.exports = user;
+module.exports = User;

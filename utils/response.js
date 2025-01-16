@@ -1,4 +1,4 @@
-response = (res, status, message = null, data = null, error = null) => {
+const response = (res, status, message = null, data = null, error = null) => {
   let response = {
     status: status,
   };
